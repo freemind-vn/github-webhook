@@ -5,7 +5,7 @@ import (
 )
 
 // Handle `/` endpoint
-func Handle(w http.ResponseWriter, r *http.Request) {
+func Get(w http.ResponseWriter, r *http.Request) {
 	if _, err := w.Write([]byte("Hello World")); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}

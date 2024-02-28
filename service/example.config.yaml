@@ -1,0 +1,3 @@
+telegram:
+  plugin: data/plugins/telegram.so
+  config: data/configs/telegram.example.github.yaml

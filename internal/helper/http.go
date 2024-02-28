@@ -5,9 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
+	"log/slog"
 	"net/http"
-
-	"github.com/rs/zerolog/log"
 )
 
 type HttpResponse struct {
@@ -19,8 +18,8 @@ type HttpResponse struct {
 
 func WriteHttpError(w http.ResponseWriter, status int, err error) {
 	w.WriteHeader(status)
-	if _, err := w.Write([]byte(err.Error())); err != nil {
-		log.Error().Msgf("write http error: %s", err)
+	if _, err = w.Write([]byte(err.Error())); err != nil {
+		slog.Error("WriteHttpError", "err", err.Error())
 	}
 }
 
@@ -32,7 +31,7 @@ func WriteHttpResponse(w http.ResponseWriter, status int, v any) {
 	}
 
 	if _, err = w.Write(buf); err != nil {
-		log.Error().Msgf("write http response: %s", err)
+		slog.Error("write http response", "err", err.Error())
 	}
 }
 

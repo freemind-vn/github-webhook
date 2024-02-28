@@ -1,11 +1,10 @@
 package helper
 
 import (
+	"log/slog"
 	"os"
 	"os/exec"
 	"time"
-
-	"github.com/rs/zerolog/log"
 )
 
 var debounced func(f func())
@@ -16,19 +15,19 @@ func InitCommand(workingDir string, timeout int64) {
 
 // Runs multiple commands in a single shell instance
 func RunCommand(dir, commands string) {
-	log.Info().Msgf("shell commands: %s", commands)
+	slog.Info("RunCommand", "cmd", commands)
 	cmd := exec.Command("/bin/sh", "-c", commands)
 	cmd.Dir = dir
 	cmd.Stdout = os.Stdout
 	err := cmd.Run()
 	if err != nil {
-		log.Error().Msgf("run command: %s", err)
+		slog.Error("RunCommand", "err", err)
 	}
 }
 
 // Commits the changes
 func RunDebouncedCommand(dir, commands string) {
-	log.Info().Msgf("shell (debounced): %s", commands)
+	slog.Info("RunDebouncedCommand", "cmd", commands)
 	debounced(func() {
 		RunCommand(dir, commands)
 	})

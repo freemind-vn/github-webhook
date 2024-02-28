@@ -5,15 +5,26 @@ import (
 	"os"
 	"runtime"
 
-	"freemind.com/webhook/service"
 	"github.com/spf13/cobra"
+)
+
+// Args passed via build in the `Makefile`
+// -ldflags="-X 'pkg/service.BuildDate=$(name)' -X 'pkg/service.Branch=$(version)...'"
+var (
+	Name        string
+	Description string
+	Version     string
+	BuildDate   string
+	Branch      string
+	Hash        string
+	BuildMode   string
 )
 
 // RootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:     "webhook",
 	Short:   "GitHub Webhook Event Notifications",
-	Version: fmt.Sprintf("v%s-%s/%s %s/%s BuildDate=%s\n", service.Version, service.Hash, service.Branch, runtime.GOOS, runtime.GOARCH, service.BuildDate),
+	Version: fmt.Sprintf("v%s-%s/%s %s/%s BuildDate=%s\n", Version, Hash, Branch, runtime.GOOS, runtime.GOARCH, BuildDate),
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
