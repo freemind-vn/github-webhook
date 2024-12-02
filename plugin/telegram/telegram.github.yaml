@@ -1,44 +1,42 @@
-telegram:
-  bot_token: <BOT_TOKEN>
-  chat_id: <CHAT_ID>
-  template: |
-    {{- $event := .event }}
-    {{- $action := .action -}}
-    {{/* $prefix := printf "[%s][%s]" $event $action */}}
+bot_token: <BOT_TOKEN>
+template: |
+  {{- $event := .event }}
+  {{- $action := .action -}}
+  {{/* $prefix := printf "[%s][%s]" $event $action */}}
 
-    {{/* Issues */}}
-    {{- if (eq $event "issues") }}
+  {{/* Issues */}}
+  {{- if (eq $event "issues") }}
 
-    {{- with .issue }}
-    {{- if .assignee }}
+  {{- with .issue }}
+  {{- if .assignee }}
 
-    {{- if (or (eq $action "opened") (eq $action "assigned") (eq $action "opened")) }}
-      🐛 {{ .title }} <a href="{{ .html_url }}">#{{ .number }}</a> — <i>{{ .user.login }}</i>, assignee <b>{{ .assignee.login }}</b>
-    {{- else if (eq $action "closed") }}
-      🐛 <s>{{ .title }}</s> <a href="{{ .html_url }}">#{{ .number }}</a> — <i>{{ .user.login }}</i>
-    {{- end }}
+  {{- if (or (eq $action "opened") (eq $action "assigned") (eq $action "opened")) }}
+    🐛 {{ .title }} <a href="{{ .html_url }}">#{{ .number }}</a> — <i>{{ .user.login }}</i>, assignee <b>{{ .assignee.login }}</b>
+  {{- else if (eq $action "closed") }}
+    🐛 <s>{{ .title }}</s> <a href="{{ .html_url }}">#{{ .number }}</a> — <i>{{ .user.login }}</i>
+  {{- end }}
 
-    {{- end }}
-    {{- end }}
+  {{- end }}
+  {{- end }}
 
-    {{- end }}
-    {{/* \Issues */}}
+  {{- end }}
+  {{/* \Issues */}}
 
 
-    {{/* PR */}}
-    {{- if (eq $event "pull_request") }}
+  {{/* PR */}}
+  {{- if (eq $event "pull_request") }}
 
-    {{- with .pull_request }}
-    {{- if .assignee }}
+  {{- with .pull_request }}
+  {{- if .assignee }}
 
-    {{- if (or (eq $action "assigned") (eq $action "opened")) }}
-      💡 {{ .title }} <a href="{{ .html_url }}">#{{ .number }}</a> — <i>{{ .user.login }}</i>, assignee <b>{{ .assignee.login }}</b>
-    {{- else if (eq $action "closed") }}
-      💡 <s>{{ .title }}</s> <a href="{{ .html_url }}">#{{ .number }}</a> — <i>{{ .user.login }}</i>, assignee <b>{{ .assignee.login }}</b>
-    {{- end }}
+  {{- if (or (eq $action "assigned") (eq $action "opened")) }}
+    💡 {{ .title }} <a href="{{ .html_url }}">#{{ .number }}</a> — <i>{{ .user.login }}</i>, assignee <b>{{ .assignee.login }}</b>
+  {{- else if (eq $action "closed") }}
+    💡 <s>{{ .title }}</s> <a href="{{ .html_url }}">#{{ .number }}</a> — <i>{{ .user.login }}</i>, assignee <b>{{ .assignee.login }}</b>
+  {{- end }}
 
-    {{- end }}
-    {{- end }}
+  {{- end }}
+  {{- end }}
 
-    {{- end }}
-    {{/* \PR */}}
+  {{- end }}
+  {{/* \PR */}}

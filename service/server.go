@@ -42,7 +42,7 @@ func load(config string) error {
 
 	for k, v := range opts {
 		if err := addHook(k, v.Plugin, v.Config); err != nil {
-			return err
+			slog.Error("add hook", "id", k, "err", err.Error())
 		}
 	}
 

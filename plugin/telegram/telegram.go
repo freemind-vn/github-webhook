@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"log/slog"
 	"net/http"
 	"os"
@@ -18,7 +19,6 @@ import (
 
 type Config struct {
 	BotToken string `yaml:"bot_token"`
-	ChatID   string `yaml:"chat_id"`
 	Template string
 }
 
@@ -61,10 +61,16 @@ func Start(config string) error {
 }
 
 func Get(req *http.Request) ([]byte, error) {
-	return []byte("Hello"), nil
+	return []byte("Hello, world!"), nil
 }
 
 func Post(req *http.Request) ([]byte, error) {
+	chatID := req.URL.Query().Get("chat_id")
+	if chatID == "" {
+		slog.Info("no chat_id")
+		return nil, nil
+	}
+
 	payload, err := plugin.ReadBodyJson(req)
 	payload["event"] = req.Header.Get("X-GitHub-Event")
 
@@ -75,10 +81,14 @@ func Post(req *http.Request) ([]byte, error) {
 	}
 
 	msg := strings.TrimSpace(buf.String())
+	if msg == "" {
+		return nil, errors.New("chat_id must be present in the query params")
+	}
+
 	slog.Info("send message", "body", msg)
 
 	m, err := b.SendMessage(ctx, &bot.SendMessageParams{
-		ChatID: opts.ChatID,
+		ChatID: chatID,
 		// Text:      bot.EscapeMarkdown(msg),
 		// ParseMode: models.ParseModeMarkdown,
 		Text:      msg,
@@ -90,7 +100,3 @@ func Post(req *http.Request) ([]byte, error) {
 
 	return json.Marshal(&m)
 }
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------

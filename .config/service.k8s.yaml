@@ -27,7 +27,7 @@ ingress:
       path: /
       type: Prefix
 persistent:
-  enabled: true
+  enabled: false
   volumes:
     configs:
       accessModes:
