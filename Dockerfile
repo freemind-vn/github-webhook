@@ -12,6 +12,9 @@ COPY build/data/ data/
 
 # RUN apk --no-cache add ca-certificates
 
+RUN apt update; \
+	apt install -y ca-certificates;
+
 EXPOSE 8080
 
 CMD	[ \

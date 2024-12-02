@@ -131,6 +131,8 @@ build: build-$(OS)
 
 #: build for: linux, windows, darwin
 build-%: data
+	make plugin-$*
+
 	@for arch in $(ARCH); do \
 		echo "build: $*-$$arch"; \
 		filename=$(NAME)-$*-$$arch; \

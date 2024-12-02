@@ -67,8 +67,7 @@ func Get(req *http.Request) ([]byte, error) {
 func Post(req *http.Request) ([]byte, error) {
 	chatID := req.URL.Query().Get("chat_id")
 	if chatID == "" {
-		slog.Info("no chat_id")
-		return nil, nil
+		return nil, errors.New("chat_id must be present in the query params")
 	}
 
 	payload, err := plugin.ReadBodyJson(req)
@@ -82,7 +81,7 @@ func Post(req *http.Request) ([]byte, error) {
 
 	msg := strings.TrimSpace(buf.String())
 	if msg == "" {
-		return nil, errors.New("chat_id must be present in the query params")
+		return nil, errors.New("the template is not supported for this payload")
 	}
 
 	slog.Info("send message", "body", msg)
