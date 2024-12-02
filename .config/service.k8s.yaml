@@ -5,6 +5,10 @@ deployment:
   imagePullSecrets: []
   pullPolicy: IfNotPresent
   env: {}
+  command: []
+  args: []
+  initContainers: []
+  startup: {}
   liveness: {}
   readiness: {}
 service:
@@ -13,13 +17,30 @@ service:
     http:
       port: 8080
 ingress:
-  enabled: false
-  hosts: {}
+  enabled: true
+  className: nginx
+  domain: dev.freemind.vn
+  tls: freemind.vn
+  hosts:
+    http:
+      subdomain: webhook
+      path: /
+      type: Prefix
 persistent:
-  enabled: false
-  volumes: {}
-podSecurityContext: {}
-securityContext: {}
+  enabled: true
+  volumes:
+    configs:
+      accessModes:
+        - ReadWriteOnce
+      reclaimPolicy: Retain
+      size: 2Mi
+      path: /home/webhook/data/configs
+    plugins:
+      accessModes:
+        - ReadWriteOnce
+      reclaimPolicy: Retain
+      size: 128Mi
+      path: /home/webhook/data/plugins
 nodeSelector: {}
 affinity: {}
 tolerations: []

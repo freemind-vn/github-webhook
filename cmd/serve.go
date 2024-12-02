@@ -14,7 +14,7 @@ var (
 			return service.ServeHTTP(config)
 		},
 	}
-	config = "data/configs/example.config.yaml"
+	config = "data/configs/config.yaml"
 )
 
 // Return the serve command

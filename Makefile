@@ -83,8 +83,8 @@ lint:
 data:
 	@echo 'copy data'
 	@mkdir -p $(BUILD_DIR)/data/configs/
-	@cp -rv service/*.yaml $(BUILD_DIR)/data/configs/
-	@cp plugin/telegram/*.yaml $(BUILD_DIR)/data/configs/
+	@cp -rv service/example.config.yaml $(BUILD_DIR)/data/configs/config.yaml
+	@cp plugin/telegram/telegram.github.yaml $(BUILD_DIR)/data/configs/
 
 #: run the main package
 run: data
@@ -110,11 +110,18 @@ test-clean:
 #-----------------------------------------------------------------------------
 # Plugin
 # ----------------------------------------------------------------------------
+
+#: build plugins on Linux
+plugin: plugin-$(OS)
+
 #: build plugins
-plugin:
-	GOOS=$* GOARCH=$(ARCH) $(G_FLAGS) go build -buildmode plugin $(P_FLAGS) \
-		-o $(BUILD_DIR)/data/plugins/telegram.so \
-		plugin/telegram/telegram.go
+plugin-%:
+	@for arch in $(ARCH); do \
+		echo "build: $*-$$arch"; \
+		GOOS=$* GOARCH=$$arch $(G_FLAGS) go build -buildmode plugin $(P_FLAGS) \
+			-o $(BUILD_DIR)/data/plugins/telegram-$$arch.so \
+			plugin/telegram/telegram.go; \
+	done; \
 
 # -----------------------------------------------------------------------------
 # Build
@@ -123,7 +130,7 @@ plugin:
 build: build-$(OS)
 
 #: build for: linux, windows, darwin
-build-%:
+build-%: data
 	@for arch in $(ARCH); do \
 		echo "build: $*-$$arch"; \
 		filename=$(NAME)-$*-$$arch; \
