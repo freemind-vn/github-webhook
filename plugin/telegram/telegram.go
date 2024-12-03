@@ -71,6 +71,10 @@ func Post(req *http.Request) ([]byte, error) {
 	}
 
 	payload, err := plugin.ReadBodyJson(req)
+	if err != nil {
+		return nil, err
+	}
+
 	payload["event"] = req.Header.Get("X-GitHub-Event")
 
 	var buf bytes.Buffer
