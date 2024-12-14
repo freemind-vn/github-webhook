@@ -1,5 +1,5 @@
 name: webhook
-version: 0.1.0
+version: 0.1.1
 description: Webhook Event Notifications
 readme: https://raw.githubusercontent.com/freemind-vn/github-webhook/main/README.md
 package: freemind.com/webhook
